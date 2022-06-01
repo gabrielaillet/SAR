@@ -5,10 +5,23 @@ import tkinter.ttk as ttk
 import time
 import sys
 from random import randint
-
+import simpleaudio as sa
+import wave
 import threading
-
+import numpy as np
+from scipy.io.wavfile import read
+from scipy.io import wavfile
+import sounddevice as sd
+import soundfile as sf
+import numpy as np
 globstop = 0
+
+def loopSound():
+    c, a = wavfile.read('musique.wav')
+    v = sd.play(a,c,loop=True)
+
+
+
 
 class MyTimer:
     global globstop
@@ -140,6 +153,7 @@ class Lift:
                     if self.CurServed==5:
                         self.CurServed=0
                         self.target[self.CurPos]=randint(0,5)
+
             if self.curMouvement=='-':
                 self.CurEtage=self.CurEtage-1
                 if self.CurEtage==self.target[self.CurServed]:
@@ -337,8 +351,8 @@ class Elevator:
     def __init__(self, master):
         self.master = master
         self.frame = tk.Frame(self.master)
-
         self.master.title('Position')
+        self.son = threading.Thread(target=loopSound)
 
         style=ttk.Style()
         style.configure("TButton",padding=(0,5,0,5)) 
@@ -373,6 +387,11 @@ class Elevator:
         self.master.geometry("+400+200")
 
         self.frame.pack()
+
+        self.Lancer_son()
+
+    def Lancer_son(self):
+        self.son.start()
 
     def Rouge5(self):
 
