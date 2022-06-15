@@ -540,8 +540,6 @@ class Eclairage :
     def __init__(self, master):
         self.master = master
         self.frame = tk.Frame(self.master)
-
-        coloris = ['#FEF82B', '#FFFC9D', '#000000']
         self.master.title('Eclairage')
         self.master['background'] = '#FEF82B'
         self.master.geometry("50x80+1200+50")

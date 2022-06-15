@@ -5,7 +5,7 @@ from math import sin, pi
 import simpleaudio as sa
 import tkinter as tk
 import tkinter.ttk as ttk
-
+from Defaillance import Defaillance
 
 def alarm():
     read_sond('alarm')
@@ -17,8 +17,9 @@ def read_sond(name,played = True):
         v = sd.play(a, c, loop=True, blocking=False)
     return c,a
 
-class classe_defaillance_son:
+class classe_defaillance_son(Defaillance):
     def __init__(self,son):
+        super().__init__("On s'en tape.")
         self.son = son
         read_sond(son)
 
@@ -69,6 +70,10 @@ def son():
 
     fenetre.mainloop()
 
+
+
+if __name__ == '__main__':
+    son()
 
 
 

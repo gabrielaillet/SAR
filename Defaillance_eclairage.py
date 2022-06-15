@@ -1,6 +1,6 @@
-import time
+from Defaillance import Defaillance
 
-class Defaillance_eclairage:
+class Defaillance_eclairage(Defaillance):
     def __init__(self, eclairage):
         self.eclairage = eclairage
 
