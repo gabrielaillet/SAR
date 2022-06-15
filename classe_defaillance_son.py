@@ -3,46 +3,72 @@ from scipy.io import wavfile
 import sounddevice as sd
 from math import sin, pi
 import simpleaudio as sa
-import threading
-from tkinter import ttk
+import tkinter as tk
+import tkinter.ttk as ttk
 
 
+def alarm():
+    read_sond('alarm')
+
+def read_sond(name,played = True):
+    sa.stop_all()
+    c, a = wavfile.read(name)
+    if played:
+        v = sd.play(a, c, loop=True, blocking=False)
+    return c,a
 
 class classe_defaillance_son:
     def __init__(self,son):
         self.son = son
+        read_sond(son)
 
+    def son_normal(self):
+        read_sond(self.son)
 
     def son_sinus(self):
-        sa.stop_all()
-        a,b = wavfile.read(self.son)
-        print(len(b))
+        a,b = read_sond(self.son,played = False)
         for i in range(len(b)):
             b[i] = b[i] * sin(1/2 * pi * i/a)
-        wave_obj = sa.WaveObject(b)
-        a = wave_obj.play()
-        a.wait_done()
+        sd.play(b, a, loop=True,blocking=False)
 
     def son_sature(self):
-        sa.stop_all()
-        a,b = wavfile.read(self.son)
+        a,b = read_sond(self.son,played = False)
         b = b * 10
-        wave_obj = sa.WaveObject(b)
-        a = wave_obj.play()
-        a.wait_done()
+        sd.play(b, a, loop=True,blocking=False)
 
     def son_null(self):
-        sa.stop_all()
+        sd.stop()
 
-    def son_pas_fort(self):
-        sa.stop_all()
-        a, b = wavfile.read(self.son)
-        b = b * 0.1
-        wave_obj = sa.WaveObject(b)
-        a = wave_obj.play()
-        a.wait_done()
+def son_sature(son):
+    son.son_sature()
+def son_sinus(son):
+    son.son_sinus()
+def son_null(son):
+    son.son_null()
+def son_normal(son):
+    son.son_normal()
+
+def son():
+    fenetre = tk.Tk()
+    son = classe_defaillance_son('musique.wav')
+    label = ttk.Label(fenetre, text="Classe défaillance son")
+    fenetre.geometry("200x200")
+
+    bouton5 = ttk.Button(fenetre, text="son_normal", command=lambda: son_normal(son))
+    bouton = ttk.Button(fenetre, text="son_sature",command= lambda: son_sature(son))
+    bouton2 = ttk.Button(fenetre, text="son_sinus", command=lambda: son_sinus(son))
+    bouton3 = ttk.Button(fenetre, text="son_stop", command= lambda: son_null(son))
+    bouton4 = ttk.Button(fenetre, text="alarm not playing", command=lambda: son_null(son))
+
+    label.pack()
+    bouton5.pack()
+    bouton.pack()
+    bouton2.pack()
+    bouton3.pack()
+    bouton4.pack()
+
+    fenetre.mainloop()
 
 
-if __name__ == '__main__':
-    print('q')
+
 
