@@ -4,9 +4,9 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import time
 import sys
-from random import randint
-import simpleaudio as sa
-import wave
+from random import *
+from Defaillance_eclairage import *
+
 import threading
 import numpy as np
 from scipy.io.wavfile import read
@@ -58,6 +58,9 @@ class Lift:
 
         self.CreerEtage()
         self.CreerElevator()
+        self.CreerEclairage()
+        self.CreerDefaillance_eclairage()
+        self.CreerDefaillance()
 
         self.buttonA = tk.Button(self.frame, text = 'Alarm')
         self.buttonA.pack()
@@ -127,6 +130,17 @@ class Lift:
 
         self.newWindow = tk.Toplevel(self.master)
         self.Elevator = Elevator(self.newWindow)
+
+    def CreerEclairage(self):
+        self.newWindow = tk.Toplevel(self.master)
+        self.Eclairage = Eclairage(self.newWindow)
+
+    def CreerDefaillance(self):
+        self.newWindow = tk.Toplevel(self.master)
+        self.Defaillance = Defaillance(self.newWindow, self)
+
+    def CreerDefaillance_eclairage(self):
+        self.Defaillance_eclairage = Defaillance_eclairage(self.Eclairage)
 
     def move(self):
         if self.CurEtage > 5:
@@ -522,7 +536,30 @@ class Elevator:
         self.button1.configure(style="Black.TButton")
         self.button1.pack()
 
+class Eclairage :
+    def __init__(self, master):
+        self.master = master
+        self.frame = tk.Frame(self.master)
 
+        coloris = ['#FEF82B', '#FFFC9D', '#000000']
+        self.master.title('Eclairage')
+        self.master['background'] = '#FEF82B'
+        self.master.geometry("50x80+1200+50")
+
+class Defaillance(Lift):
+    def __init__(self, master,Lift):
+        self.master = master
+        self.frame = tk.Frame(self.master)
+        self.master.title('Défaillances')
+        self.button1 = tk.Button(self.frame, text='Peu eclairage', command=Lift.Defaillance_eclairage.peu_eclairage)
+        self.button1.pack()
+        self.button2 = tk.Button(self.frame, text='Pas eclairage', command=Lift.Defaillance_eclairage.pas_eclairage)
+        self.button2.pack()
+        self.button3 = tk.Button(self.frame, text='Eclairage clignotant', command=Lift.Defaillance_eclairage.haut)
+        self.button3.pack()
+        self.master.geometry("+600+600")
+
+        self.frame.pack()
 
 def main(): 
     root = tk.Tk()
