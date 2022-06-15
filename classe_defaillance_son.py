@@ -19,8 +19,9 @@ def read_sond(name,played = True):
 
 class classe_defaillance_son(Defaillance):
     def __init__(self,son):
-        super().__init__("On s'en tape.")
+        super().__init__("Pas de probleme.")
         self.son = son
+        self.afficher_message()
         read_sond(son)
 
     def son_normal(self):
@@ -36,9 +37,12 @@ class classe_defaillance_son(Defaillance):
         a,b = read_sond(self.son,played = False)
         b = b * 10
         sd.play(b, a, loop=True,blocking=False)
-
+        self.message = 'alerte !!!!!'
+        self.new_message()
     def son_null(self):
         sd.stop()
+        self.message = 'pas de probleme'
+        self.new_message()
 
 def son_sature(son):
     son.son_sature()
